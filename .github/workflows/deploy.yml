@@ -16,15 +16,23 @@ jobs:
 
       - name: Setup SSH
         run: |
+          set -euo pipefail
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          printf '%s' "${{ secrets.DEPLOY_KEY_B64 }}" | base64 -d > ~/.ssh/id_ed25519
+          # Strip CRLF if anything introduced Windows line endings
+          sed -i 's/\r$//' ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+      
+          # Quick sanity checks so failures are obvious
+          ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null
+      
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Deploy files to server
         run: |
           rsync -az --delete \
-            --exclude ".git" \
-            --exclude ".github" \
-            ./public/ \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/
+          -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
+          --exclude ".git" \
+          --exclude ".github" \
+          ./public/ \
+          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/
