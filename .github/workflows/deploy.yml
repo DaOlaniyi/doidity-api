@@ -28,11 +28,9 @@ jobs:
       
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy files to server
+      - name: Deploy built site to server
         run: |
           rsync -az --delete \
-          -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
-          --exclude ".git" \
-          --exclude ".github" \
-          ./public/ \
-          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
+            doidity-api-dashboard/dist/ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/
