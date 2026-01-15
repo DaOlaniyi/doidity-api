@@ -1,23 +1,27 @@
-import { useState } from "react";
+// import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>API Project Dashboard</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+      <div className="title">
+        <h1>API Project Dashboard</h1>
+        <p className="read-the-docs">
+          Control site for Laser Doge, Run Bro Run, the Novel Editor, and other
+          projects{" "}
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="card">
+        <div className="google-signin-btn">
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt=""
+            style={{ width: 18, height: 18 }}
+          />
+          Sign in with Google
+        </div>
+        <p>Authenticate your identity to manage projects</p>
+      </div>
     </>
   );
 }
