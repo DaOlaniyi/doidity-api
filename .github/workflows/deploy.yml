@@ -28,11 +28,25 @@ jobs:
       
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Deploy files to server
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Build dashboard
+        working-directory: doidity-api-dashboard
+        run: |
+          npm install
+          npm run build
+      
+      - name: Verify dist exists
+        run: |
+          ls -la doidity-api-dashboard
+          ls -la doidity-api-dashboard/dist
+    
+      - name: Deploy built site to server
         run: |
           rsync -az --delete \
-          -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
-          --exclude ".git" \
-          --exclude ".github" \
-          ./public/ \
-          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
+            doidity-api-dashboard/dist/ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/html/
