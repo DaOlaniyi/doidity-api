@@ -14,7 +14,7 @@ $date = date("n/j/Y g:ia", time());
 $status  = "ACTIVE";
 
 
-$stmt->bind_param("si", $date, null, $status);
+$stmt->bind_param("ss", $date, $status);
 
 $stmt->execute();
 
