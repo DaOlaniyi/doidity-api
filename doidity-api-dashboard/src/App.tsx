@@ -8,7 +8,7 @@ function App() {
         <h1>API Project Dashboard</h1>
         <p className="read-the-docs">
           Control site for Laser Doge, Run Bro Run, the Novel Editor, and other
-          projects{" "}
+          projects. Last Updated on 2/12.{" "}
         </p>
       </div>
       <div className="card">
