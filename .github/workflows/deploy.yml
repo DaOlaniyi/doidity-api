@@ -50,3 +50,20 @@ jobs:
             -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
             doidity-api-dashboard/dist/ \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/html/
+
+      - name: Deploy public PHP endpoints (browser-accessible)
+        run: |
+          rsync -az \
+            --include='*.php' --exclude='*' \
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
+            public/ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/public/html/
+
+      - name: Deploy private backend PHP (not web accessible)
+        run: |
+          rsync -az \
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes" \
+            private/ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/api/private/
+
+
