@@ -7,7 +7,7 @@ if ($mysqli->connect_error) {
 
 // insert into people(name, age)
 $stmt = $mysqli->prepare(
-    "INSERT INTO dates-active (date, index, status) VALUES (?, ?, ?)"
+    "INSERT INTO `dates-active` (`date`, `index`, `status`) VALUES (?, ?, ?)"
 );
 
 $date = date("n/j/Y g:ia", time());
